@@ -62,4 +62,14 @@ Actors extend the `Actor trait` which provides
    - The `self` reference to the ActorRef of the actor
    - The `sender` reference sender actor of the last received message, typically used to reply the sender
    - `supervisorStrategy` user overridable definition the strategy for supervising child actors
+   - `context` exposes contextual information for the actor and the current message. You can even import members in the context to avoid prefixing access with context.
+   ```
+   class FirstActor extends Actor {
+      import context._
+      val myActor = actorOf(Props[MyActor], name = "myActor")
+      def receive = {
+         case x => myActor ! x
+      }
+   }
+   ```
    
