@@ -10,6 +10,19 @@ If we are in a state S and the event E occurs, we should perform the actions A a
      - The actor receives an event
      - The actor performs an action
      - On performing the action, the actor goes into a new state
+   - An actor must be in one of the defined states at all times
+   - States must be in the typed system
+   - We define a state as a case object which extends a common trait
+   ```
+   trait ObjectState
+   case object On extends ObjectState
+   case object Off extends ObjectState
+   case object Sleeping extends ObjectState
+   case object Hibernating extends ObjectState
+   
+   ```
+   - We also need to be able to attach a data object to each state.
+     - Typically, 
      
      ```
      //received events (The events the FSM listens for)
