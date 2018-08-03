@@ -56,3 +56,10 @@ Basics of  an Actor system
    - You can start using Akka without defining any configuration, since sensible default values are provided.
    - All configuration for Akka is held within instances of ActorSystem, or put differently, as viewed from the outside, ActorSystem is the only consumer of configuration information. 
    
+## Actor API
+Actors extend the `Actor trait` which provides
+   - The `receive` method
+   - The `self` reference to the ActorRef of the actor
+   - The `sender` reference sender actor of the last received message, typically used to reply the sender
+   - `supervisorStrategy` user overridable definition the strategy for supervising child actors
+   
