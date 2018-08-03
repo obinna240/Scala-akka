@@ -12,17 +12,6 @@ If we are in a state S and the event E occurs, we should perform the actions A a
      - On performing the action, the actor goes into a new state
    - An actor must be in one of the defined states at all times
    - States must be in the typed system
-   - We define a state as a case object which extends a common trait
-   ```
-   trait ObjectState
-   case object On extends ObjectState
-   case object Off extends ObjectState
-   case object Sleeping extends ObjectState
-   case object Hibernating extends ObjectState
-   
-   ```
-   - We also need to be able to attach a data object to each state.
-     - Typically, 
      
      ```
      //received events (The events the FSM listens for)
@@ -92,3 +81,29 @@ class Buncher extends FSM[State, Data] {
   initialize()
 }
  ```
+
+## FSM Creation Steps
+- We define the states - a state as a case object which extends a common trait
+   
+   ```
+   trait ObjectState
+   case object On extends ObjectState
+   case object Off extends ObjectState
+   case object Sleeping extends ObjectState
+   case object Hibernating extends ObjectState
+   
+   ```
+- Define a data object to each state (In other words in a particular state, there has to be an object that can be referred to it)
+  - The data object could be a case class or a case object
+  - Typically, we define a common trait and have case objects or classes which extend it
+  - We could have different types for each state
+  - For example, in a game, we could define our data type as a `Map[Int, Option[Player]]`. The keys of this map will be numbers representing the squares (numbered 0-8, left to right), while the values indicate which player is occupying the square. The value will be None if there is no player in the square, or Some(X) or Some(O)f when one of the players has occupied the square.
+- Once types are defined we can mix in FSM to the actor.
+- The FSM must be parameterized with the types we'll be using for state and data.
+```
+trait Player
+class Game extends Actor with FSM[ObjectState, Map[Int, Option[Player]]] {
+   startWith(PlayerXTurn, Map.empty ++ (0 to 8 map(i => i -> None)))
+}
+```
+- We now need to define what state the FSM should start at and the data at that state. This is defined with a call to the `startWith` method in the actor body
