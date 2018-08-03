@@ -64,8 +64,8 @@ class MyActor extends Actor {
     class MyActor extends Actor with ActorLogging {
       import MyActor._
       def receive = {
-        case Greeting(greeter) ⇒ log.info(s"I was greeted by $greeter.")
-        case Goodbye           ⇒ log.info("Someone said goodbye to me.")
+        case Greeting(greeter) => log.info(s"I was greeted by $greeter.")
+        case Goodbye           => log.info("Someone said goodbye to me.")
       }
     }
     
