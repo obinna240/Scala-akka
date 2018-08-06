@@ -114,3 +114,115 @@ class Game extends Actor with FSM[ObjectState, Map[Int, Option[Player]]] {
 }
 ```
 - We now need to define what state the FSM should start at and the data at that state. This is defined with a call to the `startWith` method in the actor body
+
+```
+import akka.actor.{ ActorRef, FSM }
+import scala.concurrent.duration._
+import scala.collection._
+
+/**
+ * The FSM trait takes two type parameters:
+
+the supertype of all state names, usually a sealed trait with case objects extending it
+the type of the state data which are tracked by the FSM module itself.
+**/
+
+//messages
+//received events
+final case class SetTarget(ref: ActorRef)
+final case class Queue(obj: Any)
+case object Flush
+
+//sent events
+final case class Batch(obj: immutable.Seq[Any])
+
+//state
+sealed trait State
+case object Idle extends State
+case object Active extends State
+case object Asleep extends State
+
+//data
+sealed trait Data
+case object Uninitialized extends Data
+final case class Todo(target: ActorRef, queue: immutable.Seq[Any]) extends Data
+
+//declare the actor
+//we can attach some data to each state
+//Note that we could have different data types appended to states
+//By using the sealed trait Data, we can have different types of Data types
+class Buncher extends FSM[State, Data]{
+  
+  //startWith defines the initial state and initial data
+  //Each FSM needs a starting point declared using
+  //startWith(state, data[, timeout])
+  startWith(Idle, Uninitialized)
+  
+  //the result of any state function must be a definition of the next state unless
+  //terminating the FSM
+  when(Idle) {
+    case Event(SetTarget(ref), Uninitialized) =>
+      stay using Todo(ref, Vector.empty) //stay in this state, replace the 
+      //unuinitialized object with a Todo object
+  }
+  
+  when(Asleep) {
+    //This takes the form
+    /**
+     * 
+    case Event(msg, data) => {
+      
+    }
+    see below for an example
+    **/
+    // case Event(SetTarget(ref), Uninitialized) => {
+    //   stay using Todo(ref, Vector.empty)
+    // }
+    FSM.NullFunction
+  }
+  
+  
+  
+  
+   onTransition {
+    case Active -> Idle =>
+      stateData match {
+        case Todo(ref, queue) => ref ! Batch(queue)
+        case _                => // nothing to do
+      }
+  }
+  
+  //Active state has a state timeout declared which means that if no message
+  //is received for 1 second, a FSM.StateTimeout message will be generated
+  when(Active, stateTimeout = 1 second) {
+    case Event(Flush | StateTimeout, t: Todo) =>
+      goto(Idle) using t.copy(queue = Vector.empty)
+  }
+  
+  whenUnhandled {
+    // common code for both states
+    case Event(Queue(obj), t @ Todo(_, v)) =>
+      goto(Active) using t.copy(queue = v :+ obj)
+
+    case Event(e, s) =>
+      log.warning("received unhandled request {} in state {}/{}", e, stateName, s)
+      stay
+  }
+  
+  //This starts up the FSM and performs the transition into the initial state and sets up timers
+  initialize() 
+ }
+ 
+//implicit classes
+implicit class IntTimes(x: Int) {
+  def times [A](f: => A): Unit = {
+         def loop(current: Int): Unit =
+         
+         if(current > 0){
+            f
+            loop(current - 1)
+         }
+         loop(x)
+      }
+}
+```
