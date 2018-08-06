@@ -2,6 +2,10 @@
 
 ## Overview
 If we are in a state S and the event E occurs, we should perform the actions A and make a transition to state S'
+To construct the FSM, we must describe:
+   - the messages received or produced by the Actor (Typically case objects and case classes).
+   - the states that the actor could be in. These states will typically extend a `sealed trait State`
+   - Finally, the internal state data of the actor which is made up of the target actor reference and other messages. This basically represents the data held or moved around by the FSM actor.
 
 ## Basics
    - FSM is a trait
@@ -12,6 +16,9 @@ If we are in a state S and the event E occurs, we should perform the actions A a
      - On performing the action, the actor goes into a new state
    - An actor must be in one of the defined states at all times
    - States must be in the typed system
+   - The FSM trait takes two type parameters:
+     - the supertype of all state names, usually a sealed trait with case objects extending it
+     - the type of the state data which are tracked by the FSM module itself.
      
      ```
      //received events (The events the FSM listens for)
