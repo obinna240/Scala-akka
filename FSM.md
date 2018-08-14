@@ -11,7 +11,11 @@ To construct the FSM, we must describe:
    - An actor can be in a state `become` or `unbecome` 
    - However, if it can exist in more than two states, then it is recommended that we use FSMs
    - FSM is a trait
-   - With any FSM two things are key: The state of the machine and the data, as such for our FSM, we declare it by indicating its state and data i.e. ```class FSM1 extends FSM[FSMState, FSMData]```. This also means that all our possible states extends `FSMState` and all of our data extends `FSMData`.
+   - With any FSM two things are key: The state of the machine and the data, as such for our FSM, we declare it by indicating its state and data i.e. This also means that all our possible states extends `FSMState` and all of our data extends `FSMData`.
+```
+class FSM1 extends FSM[FSMState, FSMData]
+```
+
    - We can now declare all our states and data in a companion object
 ```
     object FSM1 {
