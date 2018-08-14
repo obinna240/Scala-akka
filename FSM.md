@@ -13,7 +13,7 @@ To construct the FSM, we must describe:
    - FSM is a trait
    - With any FSM two things are key: The state of the machine and the data, as such for our FSM, we declare it by indicating its state and data i.e. ```class FSM1 extends FSM[FSMState, FSMData]```. This also means that all our possible states extends `FSMState` and all of our data extends `FSMData`.
    - We can now declare all our states and data in a companion object
-    ```
+```
     object FSM1 {
       sealed trait FSMState
       case object State1 extends FSMState
@@ -22,7 +22,7 @@ To construct the FSM, we must describe:
       
       case class FSMData(age: Int, status: String)
     }
-   ```
+```
 
 ## Implementation
    - There are four parts to a FSM
@@ -36,7 +36,7 @@ To construct the FSM, we must describe:
      - the supertype of all state names, usually a sealed trait with case objects extending it
      - the type of the state data which are tracked by the FSM module itself.
      
-     ```
+   ```
      //received events (The events the FSM listens for)
      final case class SetTarget(ref: ActorRef)
      final case class Queue(obj: Any)
@@ -46,7 +46,7 @@ To construct the FSM, we must describe:
      final case class Batch(obj: immutable.Seq[Any])
      
      //SetTarget is needed for starting it up, setting the destination for the Batches to be passed on; Queue will add to the internal queue while Flush will mark the end of a burst.
-     ```
+   ```
    - Additionally, actors need to be in a state
      - Actors can be `Idle` i.e no message queued
      - Actors can be `Active` i.e some queued message
