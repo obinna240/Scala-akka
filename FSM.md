@@ -27,7 +27,32 @@ class FSM1 extends FSM[FSMState, FSMData]
       case class FSMData(age: Int, status: String)
     }
 ```
-
+   - The structure of our state machine can now look like this
+```
+   class FSM1 extends FSM[FSMState, FSMData] {
+      when(State1) {
+         case Event() => {
+         }
+         ...
+      }
+      when(State2) {
+      }
+      when(State3) {
+      }
+      whenUnHandled {
+      }
+      onTransition {
+         case State1 -> State2 => ...
+         case State2 -> State3 => ...
+         case State3 -> State1 => ...
+      }
+   }
+```
+   - When in a state, messages are sent. These messages are handled in the state block
+   - Messages are regular events, which wrap the data
+   - Events could look like this ```Event(changeStatus: Status, FSMData(age, status) )```
+   - Only messages which match the case are handled 
+   - Use `onTransition` to get notified of changes in state
 ## Implementation
    - There are four parts to a FSM
      - The actor needs to be in a state
