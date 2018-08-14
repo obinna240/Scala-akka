@@ -22,7 +22,7 @@ To construct the FSM, we must describe:
       
       case class FSMData(age: Int, status: String)
     }
-    ```
+   ```
 
 ## Implementation
    - There are four parts to a FSM
