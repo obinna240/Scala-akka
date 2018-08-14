@@ -8,6 +8,8 @@ To construct the FSM, we must describe:
    - Finally, the internal state data of the actor which is made up of the target actor reference and other messages. This basically represents the data held or moved around by the FSM actor.
 
 ## Basics
+   - An actor can be in a state `become` or `unbecome` 
+   - However, if it can exist in more than two states, then it is recommended that we use FSMs
    - FSM is a trait
    - There are four parts to a FSM
      - The actor needs to be in a state
