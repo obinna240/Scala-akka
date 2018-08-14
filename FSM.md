@@ -11,6 +11,7 @@ To construct the FSM, we must describe:
    - An actor can be in a state `become` or `unbecome` 
    - However, if it can exist in more than two states, then it is recommended that we use FSMs
    - FSM is a trait
+   - With any FSM two things are key: The state of the machine and the data, as such for our FSM, we declare it by indicating its state and data i.e. ```class FSM1 extends FSM[MachineState, MachineData]```
    - There are four parts to a FSM
      - The actor needs to be in a state
      - The actor receives an event
@@ -40,7 +41,7 @@ To construct the FSM, we must describe:
  
  ## FSM Example
  ```
- import akka.pattern._
+import akka.pattern._
 import akka.util._
 import akka.actor.FSM
 import akka.actor.ActorRef
