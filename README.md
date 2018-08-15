@@ -1,5 +1,8 @@
 # Scala-Building-Modules
-
+In building Scala modules note the following:
+  - Classes can be divided into singleton objects 
+  - This approach makes testing easy as we basically modularize each class into mocks
+  
 ```
 abstract class Food(val name:String) {
   override def toString = name
