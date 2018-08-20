@@ -1,4 +1,5 @@
 ## Note on Streams
+See - https://blog.scalac.io/2017/04/18/akka-streams-introduction.html#introduction-to-the-concept-of-streams
 ```
 import akka.{Done, NotUsed}
 import akka.actor.ActorSystem
@@ -10,15 +11,34 @@ object SimpleStreamExample {
   def main(args: Array[String]): Unit = {
     //create the actor system
     implicit val system = ActorSystem("Sys")
-    //create the actor materializer, which is used to run the stream
+    /**
+     * create the actor materializer, which is used to run the stream
+     * Materializer is needed to materialize the flow into a Processor
+     * which represents a processing stage.
+     * */
     implicit val materializer = ActorMaterializer()
     
     val numbers = 1 to 1000
     
-    //let's create a source that will iterate over the number sequence
+    /**
+     * Source consists of only one output
+     * it takes two types of parameters.
+     * First the type of data it emits: In this example an Int
+     * Second, is the type of auxiliary value it can produce when materialized or ran
+     * If we don't produce any type we simply used NotUsed. 
+     * Nowlet's create a source that will iterate over the number sequence
+     * */
     val numberSource:Source[Int, NotUsed] = Source.fromIterator(() => numbers.iterator)
     
-    //build the flow: Only let pass even numbers through the flow
+    /**
+     * The flow represents a Stream (a set of processing steps) with one open input
+     * and one open output. It is an ordered chain of transformations to its input
+     * It takes three types of parameters, the input datatype, outputand last the auxiliary type
+     * 
+     * Let's now build the flow: Only let pass even numbers through the flow
+     * We can create as many flows as we want
+     * Or chain two flows together
+     **/
     val isEvenFlow: Flow[Int, Int, NotUsed] = Flow[Int].filter((num) => num % 2 == 0)
     
     //create a source of even random numbers by combining the random number source 
@@ -32,4 +52,5 @@ object SimpleStreamExample {
     evenNumberSource.runWith(consoleSink)
   }
 }
+ 
 ```
