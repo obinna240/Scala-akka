@@ -11,7 +11,6 @@ val source: Source[Int, NotUsed] = Source(1 to 100)
 ```
 source.runForEach(i => println(i))(materializer)
 ```
-- 
 
 ### Some Code
 See - https://blog.scalac.io/2017/04/18/akka-streams-introduction.html#introduction-to-the-concept-of-streams
