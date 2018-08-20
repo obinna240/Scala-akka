@@ -5,7 +5,7 @@ A stream will typically start with a source
 ```
 val source: Source[Int, NotUsed] = Source(1 to 100)
 ```
-    - The Source type has two parameters
+   - The Source type has two parameters
 
 ### Some Code
 See - https://blog.scalac.io/2017/04/18/akka-streams-introduction.html#introduction-to-the-concept-of-streams
